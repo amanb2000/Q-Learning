@@ -43,6 +43,22 @@ class Agent:
 		if num > 3:
 			num = 0
 
+		nx = self.x
+		ny = self.y
+
+		if num == 0:
+			ny -= 1
+		elif num == 1:
+			nx += 1
+		elif num == 2:
+			ny += 1
+		elif num == 3:
+			nx -=1
+
+		if self.bounce_back(self.x, self.y, nx, ny):
+
+
+
 
 		if num == 0:
 			if self.y > 0:
@@ -79,8 +95,19 @@ class Agent:
 		ret_val = max(self.q_vals[x][y])
 		return ret_val
 
+	def bounce_back(self, cx, cy, nx, ny):
+		if nx < 0 or ny < 0 or nx >= self.WIDTH or ny >= self.HEIGHT:
+			return True
+		elif nx == 1 and ny == 1:
+			return True
+		return False
+
 	# Function for updating q-values based on current position, new position, and direction.
 	def update_q_vals(self, cx, cy, nx, ny, direction): # current x, current y
 												  # new x, new y, direction (0-3)
-		self.q_vals[cx][cy][direction] = self.q_vals[cx][cy][direction] + self.alpha*(self.get_reward(nx, ny) + self.gamma*self.get_max_q(nx, ny) - self.q_vals[cx][cy][direction])
-		return
+		if(nx == cx and cy == ny):
+			self.q_vals[cx][cy][direction] = self.q_vals[cx][cy][direction] + self.alpha*(-0.04 - self.q_vals[cx][cy][direction])
+			return
+		else:
+			self.q_vals[cx][cy][direction] = self.q_vals[cx][cy][direction] + self.alpha*(self.get_reward(nx, ny) + self.gamma*self.get_max_q(nx, ny) - self.q_vals[cx][cy][direction])
+			return

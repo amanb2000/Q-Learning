@@ -15,7 +15,7 @@ WIDTH = 4
 HEIGHT = 3
 BLOCK_SIZE = 200
 
-font = pygame.font.Font('freesansbold.ttf', 30)
+font = pygame.font.Font('freesansbold.ttf', 20)
 
 def draw_agent(_agent):
 	pygame.draw.rect(DISP, (255, 255, 255), ( (_agent.x*BLOCK_SIZE+BLOCK_SIZE*0.4), 

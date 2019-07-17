@@ -1,7 +1,12 @@
+import random
+
 class Agent:
 	def __init__(self):
 		self.x = 0
-		self.y = 0
+		self.y = 2
+
+		self.alpha = 0.5;
+		self.gamma = 0.99;
 
 		self.WIDTH = 4
 		self.HEIGHT = 3
@@ -18,19 +23,64 @@ class Agent:
 			self.q_vals += [addVal];
 
 		self.q_vals[3][0] = [1, 1, 1, 1]
-		self.q_vals[1][1] = ['x', 'x', 'x', 'x']
+		# self.q_vals[1][1] = ['x', 'x', 'x', 'x']
+		self.q_vals[1][1] = [0, 0, 0, 0]
 		self.q_vals[3][1] = [-1, -1, -1, -1]
 
 
 
 
 	def move(self, num): # up = 0; right = 1; down = 2; left = 3
-		if num == 0:
-			self.y -= 1
-		elif num == 1:
-			self.x += 1
-		elif num == 2:
-			self.y += 1
-		elif num == 3:
-			self.x -= 1
+		# Implementing random chance of left/right
+		rand = random.random()
+		if(rand > 0.9):
+			num += 1
+		elif(rand > 0.8):
+			num -= 1
 
+		if num < 0:
+			num = 3
+		if num > 3:
+			num = 0
+
+
+		if num == 0:
+			if self.y > 0:
+				self.update_q_vals(self.x, self.y, self.x, self.y-1, num);
+				self.y -= 1
+		elif num == 1:
+			if self.x+1 < self.WIDTH:
+				self.update_q_vals(self.x, self.y, self.x+1, self.y, num);
+				self.x += 1
+		elif num == 2:
+			if self.y+1 < self.HEIGHT:
+				self.update_q_vals(self.x, self.y, self.x, self.y+1, num);
+				self.y += 1
+		elif num == 3:
+			if self.x > 0:
+				self.update_q_vals(self.x, self.y, self.x-1, self.y, num);
+				self.x -= 1
+
+		if self.check_end():
+			self.x = 0
+			self.y = 2
+
+	def check_end(self):
+		if self.x == 3 and self.y == 0:
+			return True
+		elif self.x == 3 and self.y == 1:
+			return True
+
+	def get_reward(self, x, y): # helper function
+		ret_val = -0.04
+		return ret_val;
+
+	def get_max_q(self, x, y): # Helper function
+		ret_val = max(self.q_vals[x][y])
+		return ret_val
+
+	# Function for updating q-values based on current position, new position, and direction.
+	def update_q_vals(self, cx, cy, nx, ny, direction): # current x, current y
+												  # new x, new y, direction (0-3)
+		self.q_vals[cx][cy][direction] = self.q_vals[cx][cy][direction] + self.alpha*(self.get_reward(nx, ny) + self.gamma*self.get_max_q(nx, ny) - self.q_vals[cx][cy][direction])
+		return

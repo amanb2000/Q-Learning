@@ -5,7 +5,7 @@ class Agent:
 		self.x = 0
 		self.y = 2
 
-		self.alpha = 0.5;
+		self.alpha = 0.4;
 		self.gamma = 0.99;
 
 		self.WIDTH = 4
@@ -28,10 +28,13 @@ class Agent:
 		self.q_vals[3][1] = [-1, -1, -1, -1]
 
 
+	def get_move(self):
+		return self.q_vals[self.x][self.y].index(max(self.q_vals[self.x][self.y]))
 
 
-	def move(self, num): # up = 0; right = 1; down = 2; left = 3
+	def move(self, num_in): # up = 0; right = 1; down = 2; left = 3
 		# Implementing random chance of left/right
+		num = num_in
 		rand = random.random()
 		if(rand > 0.9):
 			num += 1
@@ -56,26 +59,11 @@ class Agent:
 			nx -=1
 
 		if self.bounce_back(self.x, self.y, nx, ny):
-
-
-
-
-		if num == 0:
-			if self.y > 0:
-				self.update_q_vals(self.x, self.y, self.x, self.y-1, num);
-				self.y -= 1
-		elif num == 1:
-			if self.x+1 < self.WIDTH:
-				self.update_q_vals(self.x, self.y, self.x+1, self.y, num);
-				self.x += 1
-		elif num == 2:
-			if self.y+1 < self.HEIGHT:
-				self.update_q_vals(self.x, self.y, self.x, self.y+1, num);
-				self.y += 1
-		elif num == 3:
-			if self.x > 0:
-				self.update_q_vals(self.x, self.y, self.x-1, self.y, num);
-				self.x -= 1
+			self.update_q_vals(self.x, self.y, self.x, self.y, num_in)
+		else:
+			self.update_q_vals(self.x, self.y, nx, ny, num_in);
+			self.x = nx
+			self.y = ny
 
 		if self.check_end():
 			self.x = 0

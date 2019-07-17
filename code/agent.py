@@ -5,8 +5,8 @@ class Agent:
 		self.x = 0
 		self.y = 2
 
-		self.alpha = 0.4;
-		self.gamma = 0.99;
+		self.alpha = 0.5;
+		self.gamma = 0.9;
 
 		self.WIDTH = 4
 		self.HEIGHT = 3

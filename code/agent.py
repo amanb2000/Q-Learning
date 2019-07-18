@@ -5,7 +5,7 @@ class Agent:
 		self.x = 0
 		self.y = 2
 
-		self.alpha = 0.5;
+		self.alpha = 0.07;
 		self.gamma = 0.9;
 
 		self.WIDTH = 4
@@ -59,9 +59,9 @@ class Agent:
 			nx -=1
 
 		if self.bounce_back(self.x, self.y, nx, ny):
-			self.update_q_vals(self.x, self.y, self.x, self.y, num_in)
+			self.update_q_vals(self.x, self.y, self.x, self.y, num)
 		else:
-			self.update_q_vals(self.x, self.y, nx, ny, num_in);
+			self.update_q_vals(self.x, self.y, nx, ny, num)
 			self.x = nx
 			self.y = ny
 
